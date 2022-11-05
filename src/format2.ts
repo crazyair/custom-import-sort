@@ -24,7 +24,8 @@ export const getCount = (text = "") => {
 };
 
 const sortImports = (text: string, configArray?: ConfigType[]) => {
-  const list = text.split("\n").filter((x) => x);
+  const list = text.split("\n");
+  console.log(list);
   const cache: Record<string, any>[] = [];
   let isTag = false;
   list.forEach((text, index) => {
@@ -39,6 +40,10 @@ const sortImports = (text: string, configArray?: ConfigType[]) => {
       }
     }
   });
+  // import 数据
+  const _list = list.slice(0, cache[cache.length - 1].index + 1);
+  // 正文数据
+  const _list2 = list.slice(cache[cache.length - 1].index + 1, list.length);
 
   const list2: Record<string, any>[] = [];
   cache
@@ -62,7 +67,7 @@ const sortImports = (text: string, configArray?: ConfigType[]) => {
 
   const result: string[] = [];
   let cacheIndex = 0;
-  list.forEach((text, index) => {
+  _list.forEach((text, index) => {
     const data = list3.find((item) => item.index === index);
     if (data) {
       const regexData = list3[cacheIndex];
@@ -75,31 +80,61 @@ const sortImports = (text: string, configArray?: ConfigType[]) => {
       }
       cacheIndex += 1;
     } else {
-      result.push(text);
+      if (text) {
+        result.push(text);
+      }
     }
   });
-  return [...result, ""].join("\n");
+  let _result = result;
+  // 如果正文第一行为空行，则删掉 import 的最后换行
+  if (_list2[0] === "") {
+    _result = _result.slice(0, _result.length - 1);
+  }
+
+  return [..._result, ..._list2].join("\n");
 };
 
-const demo = `import a from "umi";
+// const demo = `import a from "umi";
 
-import a from "react";
+// import a from "react";
 
-import a from "ahooks";
+// import a from "ahooks";
 
-import a from "@yzh/yzhd2";
-import a from "@yzh/yzhd";
-import a from "@/c";
-// 1
-import a from "@/a";
-import a from "./c";
-import a from "./b";
-const demo = \`import a1 from "react";
-import a1 from "./1"; 
-import a1 from "./c.less";
-\`;
+// import a from "@yzh/yzhd2";
+
+// import a from "@yzh/yzhd";
+
+// import a from "@/c";
+// // 1
+// import a from "@/a";
+
+// import a from "./c";
+
+// import a from "./b";
+
+// const demo2 = () => {
+//   const demo = 1;
+
+//   const demo2 = 2;
+
+//   return { demo: 1 };
+// };
+
+// const demo = \`import a1 from "react";
+// import a1 from "./1";
+// import a1 from "./c.less";
+// \`;
+// `;
+
+const demo = `import a from "react";
+import c from "@aa";
+
+
+
+const demo = () => {
+  return "1122";
+};
 `;
-
 const dd = sortImports(demo, configArray);
 console.log(dd);
 export { sortImports };
