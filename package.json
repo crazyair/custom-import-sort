@@ -44,97 +44,26 @@
             "description": "How your imports should be sorted",
             "default": [
               {
-                "regex": "^react$",
-                "importance": 4
+                "regex": "^react$"
+              },
+              {
+                "regex": "^[a-z]"
+              },
+              {
+                "regex": "^@[^/]",
+                "lineafter": true
+              },
+              {
+                "regex": "^@/",
+                "lineafter": true
               },
               {
                 "regex": ".",
-                "importance": 0,
+                "regexNotEqual": "\\.(less|css)$",
                 "lineafter": true
               },
               {
-                "regex": "^(@|[\\.\\.\\/]+)component",
-                "importance": 3
-              },
-              {
-                "regex": "^(@|[\\.\\.\\/]+)feature",
-                "importance": 3
-              },
-              {
-                "regex": "^(@|[\\.\\.\\/]+)table",
-                "importance": 3
-              },
-              {
-                "regex": "^(@|[\\.\\.\\/]+)layout",
-                "importance": 3
-              },
-              {
-                "regex": "^(@|[\\.\\.\\/]+)page",
-                "importance": 3
-              },
-              {
-                "regex": "^@",
-                "importance": 1
-              },
-              {
-                "regex": "^\\.\\/",
-                "importance": 1
-              },
-              {
-                "regex": "^\\.\\.\\/",
-                "importance": 2,
-                "lineafter": true
-              },
-              {
-                "regex": "^(@|[\\.\\.\\/]+)util",
-                "importance": 3
-              },
-              {
-                "regex": "^(@|[\\.\\.\\/]+)api",
-                "importance": 3
-              },
-              {
-                "regex": "^(@|[\\.\\.\\/]+)service",
-                "importance": 3
-              },
-              {
-                "regex": "^(@|[\\.\\.\\/]+)store",
-                "importance": 3
-              },
-              {
-                "regex": "^(@|[\\.\\.\\/]+)store.*\\/use",
-                "importance": 4
-              },
-              {
-                "regex": "^(@|[\\.\\.\\/]+)hook",
-                "importance": 3,
-                "lineafter": true
-              },
-              {
-                "regex": "const",
-                "importance": 1
-              },
-              {
-                "regex": "^(@|[\\.\\.\\/]+)rout",
-                "importance": 3
-              },
-              {
-                "regex": "^(@|[\\.\\.\\/]+)typings",
-                "importance": 3
-              },
-              {
-                "regex": "\\.types?(\\.tsx?)?$",
-                "importance": 1,
-                "lineafter": true
-              },
-              {
-                "regex": "^\\.?\\.\\/.*\\.types(\\.tsx?)?$",
-                "importance": 4,
-                "lineafter": true
-              },
-              {
-                "regex": "\\.s?css$",
-                "importance": 4,
+                "regex": "\\.(less|css)$",
                 "lineafter": true
               }
             ]

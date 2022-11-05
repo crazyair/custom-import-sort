@@ -1,6 +1,6 @@
-type ConfigType = {
+export type ConfigType = {
   regex: string;
-  regex2?: string;
+  regexNotEqual?: string;
   lineafter?: boolean;
 };
 
@@ -9,7 +9,7 @@ const configArray: ConfigType[] = [
   { regex: "^[a-z]" },
   { regex: "^@[^/]", lineafter: true },
   { regex: "^@/", lineafter: true },
-  { regex: ".", regex2: "\\.(less|css)$", lineafter: true },
+  { regex: ".", regexNotEqual: "\\.(less|css)$", lineafter: true },
   { regex: "\\.(less|css)$", lineafter: true },
 ];
 
@@ -23,9 +23,8 @@ export const getCount = (text = "") => {
   return count;
 };
 
-const sortImports = (text: string) => {
+const sortImports = (text: string, configArray?: ConfigType[]) => {
   const list = text.split("\n").filter((x) => x);
-  console.log("list", list);
   const cache: Record<string, any>[] = [];
   let isTag = false;
   list.forEach((text, index) => {
@@ -41,32 +40,25 @@ const sortImports = (text: string) => {
     }
   });
 
-  console.log(cache);
-
-  //
   const list2: Record<string, any>[] = [];
   cache
     .sort((a, b) => a.path.localeCompare(b.path))
     .forEach((a) => {
-      let sort: number | undefined = undefined;
-      let _line: boolean | undefined = false;
-      configArray.forEach((item, index) => {
-        if (sort === undefined && RegExp(item.regex, "i").test(a.path)) {
-          if (item.regex2 ? !RegExp(item.regex2, "i").test(a.path) : true) {
+      let sort = -1;
+      let _line = false;
+      configArray?.forEach(({ regex, regexNotEqual, lineafter }, index) => {
+        if (sort === -1 && RegExp(regex, "i").test(a.path)) {
+          if (regexNotEqual ? !RegExp(regexNotEqual, "i").test(a.path) : true) {
             sort = index;
-            _line = item.lineafter;
+            if (lineafter) {
+              _line = true;
+            }
           }
         }
       });
-      const data: Record<string, any> = { sort, index: a.index, text: a.text };
-      if (_line) {
-        data.lineafter = true;
-      }
-      list2.push(data);
+      list2.push({ sort, index: a.index, text: a.text, lineafter: _line });
     });
-  console.log("list2", list2);
   const list3 = list2.sort((a, b) => -(b.sort - a.sort));
-  console.log(list3);
 
   const result: string[] = [];
   let cacheIndex = 0;
@@ -108,6 +100,6 @@ import a1 from "./c.less";
 \`;
 `;
 
-const dd = sortImports(demo);
+const dd = sortImports(demo, configArray);
 console.log(dd);
 export { sortImports };

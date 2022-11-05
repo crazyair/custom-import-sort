@@ -1,9 +1,6 @@
 import * as vscode from "vscode";
 
-// import { sortImports } from "./utils/sortImports";
-import { sortImports } from "./format2";
-// 'import a from "react";\nimport c from "aa";\nconst demo = () => {\n  return "122";\n};\n'
-// 'import a from "react";\nimport c from "aa";\nconst demo = () => {\n  return "122";\n};'
+import { ConfigType, sortImports } from "./format2";
 
 export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand("customImportSort.sortImports", () => {
@@ -14,8 +11,11 @@ export function activate(context: vscode.ExtensionContext) {
         const fileName = document.fileName;
         const extension = fileName.substring(fileName.lastIndexOf(".") + 1);
         if (/^[jt]sx?$/.test(extension)) {
+          const baseConfig = vscode.workspace
+            .getConfiguration("customImportSort")
+            .get<ConfigType[]>("sortingSettings");
           const text = document.getText();
-          const sortedText = sortImports(text);
+          const sortedText = sortImports(text, baseConfig);
           if (text !== sortedText) {
             editor.edit((editBuilder) => {
               editBuilder.replace(
