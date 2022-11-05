@@ -1,9 +1,9 @@
 {
   "name": "import-sort",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "author": "crazyair",
   "publisher": "crazyair",
-  "displayName": "Custom Import Sort",
+  "displayName": "Import Sort",
   "description": "Allows you to customize and automate import sorting",
   "license": "MIT",
   "repository": {
