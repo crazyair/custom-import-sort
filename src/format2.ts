@@ -25,9 +25,9 @@ export const getCount = (text = "") => {
 
 const sortImports = (text: string, configArray?: ConfigType[]) => {
   const list = text.split("\n");
-  console.log(list);
   const cache: Record<string, any>[] = [];
   let isTag = false;
+  let lastIndex = 0;
   list.forEach((text, index) => {
     if (isTag && getCount(text) === 1) {
       isTag = false;
@@ -36,34 +36,66 @@ const sortImports = (text: string, configArray?: ConfigType[]) => {
     }
     if (text.startsWith("import")) {
       if (isTag === false) {
-        cache.push({ index, text, path: text.split(/["']/)[1] });
+        let path = text.split(/["']/)[1];
+        if (path) {
+          cache.push({ index, text, path });
+          lastIndex = index;
+        } else {
+          let i = index;
+          let line = text;
+          const indexList = [];
+          while (!path) {
+            i++;
+            indexList.push(i);
+            path = list[i].split(/["']/)[1];
+            line += `\n${list[i]}`;
+          }
+          lastIndex = i;
+          cache.push({ index, indexList, text: line, path });
+        }
       }
     }
   });
+  console.log(cache);
+  if (cache.length === 0) {
+    return text;
+  }
   // import 数据
+  // const _list = list.slice(0, lastIndex + 1);
   const _list = list.slice(0, cache[cache.length - 1].index + 1);
   // 正文数据
-  const _list2 = list.slice(cache[cache.length - 1].index + 1, list.length);
+  const _list2 = list.slice(lastIndex + 1, list.length);
+  console.log("_list", _list);
+  console.log("_list2", _list2);
 
   const list2: Record<string, any>[] = [];
   cache
-    .sort((a, b) => a.path.localeCompare(b.path))
+    .sort((a, b) => a.path?.localeCompare(b.path))
     .forEach((a) => {
       let sort = -1;
       let _line = false;
+      let _indexList: number[] = [];
       configArray?.forEach(({ regex, regexNotEqual, lineafter }, index) => {
         if (sort === -1 && RegExp(regex, "i").test(a.path)) {
           if (regexNotEqual ? !RegExp(regexNotEqual, "i").test(a.path) : true) {
             sort = index;
+            _indexList = a.indexList;
             if (lineafter) {
               _line = true;
             }
           }
         }
       });
-      list2.push({ sort, index: a.index, text: a.text, lineafter: _line });
+      list2.push({
+        sort,
+        index: a.index,
+        text: a.text,
+        lineafter: _line,
+        indexList: _indexList,
+      });
     });
   const list3 = list2.sort((a, b) => -(b.sort - a.sort));
+  console.log(list3);
 
   const result: string[] = [];
   let cacheIndex = 0;
@@ -71,6 +103,7 @@ const sortImports = (text: string, configArray?: ConfigType[]) => {
     const data = list3.find((item) => item.index === index);
     if (data) {
       const regexData = list3[cacheIndex];
+      console.log(regexData.text);
       result.push(regexData.text);
       if (regexData.lineafter) {
         const dd = list3.filter((item) => item.sort === regexData.sort);
@@ -80,17 +113,20 @@ const sortImports = (text: string, configArray?: ConfigType[]) => {
       }
       cacheIndex += 1;
     } else {
-      if (text) {
+      const data2 = list3.find((item) => item.indexList?.includes(index));
+      if (!data2) {
         result.push(text);
       }
     }
   });
+  console.log("result", result);
   let _result = result;
   // 如果正文第一行为空行，则删掉 import 的最后换行
   if (_list2[0] === "") {
     _result = _result.slice(0, _result.length - 1);
   }
-
+  console.log("_result", _result);
+  console.log("_list2", _list2);
   return [..._result, ..._list2].join("\n");
 };
 
@@ -127,9 +163,12 @@ const sortImports = (text: string, configArray?: ConfigType[]) => {
 // `;
 
 const demo = `import a from "react";
-import c from "@aa";
-
-
+import {
+  FollowCustomerInfo,
+  postCrmPlatformUserTagBind,
+} from "@/services/crm";
+// aaa
+import a from './aa'
 
 const demo = () => {
   return "1122";
