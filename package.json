@@ -1,8 +1,8 @@
 {
   "name": "custom-import-sort",
   "version": "0.1.1",
-  "author": "Alex Rudoy",
-  "publisher": "AlexRudoy",
+  "author": "crazyair",
+  "publisher": "crazyair",
   "displayName": "Custom Import Sort",
   "description": "Allows you to customize and automate import sorting",
   "license": "MIT",
