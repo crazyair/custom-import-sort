@@ -1,6 +1,9 @@
 import * as vscode from "vscode";
 
-import { sortImports } from "./utils/sortImports";
+// import { sortImports } from "./utils/sortImports";
+import { sortImports } from "./format2";
+// 'import a from "react";\nimport c from "aa";\nconst demo = () => {\n  return "122";\n};\n'
+// 'import a from "react";\nimport c from "aa";\nconst demo = () => {\n  return "122";\n};'
 
 export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand("customImportSort.sortImports", () => {
