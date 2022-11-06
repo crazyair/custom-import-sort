@@ -1,4 +1,4 @@
-# custom-import-sort README
+# import-sort README
 
 POC of import sorting extension
 
@@ -10,9 +10,9 @@ Can be customized. It is just quite troublesome to do so.
 
 ## Extension Settings
 
-`customImportSort.sortOnSave`: check this to sort on save
+`importSort.sortOnSave`: check this to sort on save
 
-`customImportSort.sortingSettings`: array of sorting groups
+`importSort.sortingSettings`: array of sorting groups
 
 Each sorting group should have:
 
