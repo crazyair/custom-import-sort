@@ -44,27 +44,27 @@
             "description": "How your imports should be sorted",
             "default": [
               {
-                "regex": "^react$"
+                "regex": [
+                  "^react$",
+                  "^[a-z]",
+                  "^@[^/]"
+                ]
               },
               {
-                "regex": "^[a-z]"
+                "regex": [
+                  "^@/"
+                ]
               },
               {
-                "regex": "^@[^/]",
-                "lineafter": true
+                "regex": [
+                  "."
+                ],
+                "regexNotEqual": "\\.(less|css)$"
               },
               {
-                "regex": "^@/",
-                "lineafter": true
-              },
-              {
-                "regex": ".",
-                "regexNotEqual": "\\.(less|css)$",
-                "lineafter": true
-              },
-              {
-                "regex": "\\.(less|css)$",
-                "lineafter": true
+                "regex": [
+                  "\\.(less|css)$"
+                ]
               }
             ]
           }
