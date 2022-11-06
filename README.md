@@ -1,31 +1,12 @@
 # import-sort README
 
-POC of import sorting extension
-
-## Features
-
-Can sort on save.
-
-Can be customized. It is just quite troublesome to do so.
-
 ## Extension Settings
 
-`importSort.sortOnSave`: check this to sort on save
+`importSort.sortOnSave`: 是否开启排序
 
-`importSort.sortingSettings`: array of sorting groups
+`importSort.sortingSettings`: 排序规则
 
-Each sorting group should have:
+排序的每一项配置:
 
-- `"regex": "\\.s?css$"` - regex to test import path.
-  remember to have one group with `"regex": "."`
-  to catch all imports that do not fall in any other group
-
-- `"importance": 3` - groups with higher importance work first.
-  If you have few rules that could target the same line,
-  consider giving higher `importance` to more specific one
-
-- `"lineafter": true` - to add extra empty line after block
-
-## Known Issues
-
-This extension was created not so long ago and has all sorts of issues.
+- `"regex": ["^react$", "^[a-z]"]` - 匹配规则
+- `"regexNotEqual": "^react$"` - 不可匹配规则
