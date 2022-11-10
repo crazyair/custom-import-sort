@@ -26,6 +26,7 @@ const sortImports = (text: string, configArray?: ConfigType[]) => {
   let isTag = false;
   let lastIndex = 0;
   list.forEach((text, index) => {
+    console.log(1, text, getCount(text));
     if (isTag && getCount(text) === 1) {
       isTag = false;
     } else if (getCount(text) === 1) {
@@ -160,21 +161,37 @@ const sortImports = (text: string, configArray?: ConfigType[]) => {
 // \`;
 // `;
 
-const demo = `import a from "react";
+// const demo = `import a from "react";
 
+// import a from "umi";
+// import a from "@yzh/yzhd";
+// import {
+//   FollowCustomerInfo,
+//   postCrmPlatformUserTagBind,
+// } from "@/services/crm";
+// // aaa
+// import a from './aa'
 
-import a from "umi";
-import a from "@yzh/yzhd";
-import {
-  FollowCustomerInfo,
-  postCrmPlatformUserTagBind,
-} from "@/services/crm";
-// aaa
-import a from './aa'
+// const demo = () => {
+//   return "1122";
+// };
+// `;
 
-const demo = () => {
-  return "1122";
+const demo = `export type ConfigType = {
+  regex: string[];
+  regexNotEqual?: string;
 };
+
+export const getCount = (text = "") => {
+  text.split("").forEach((item) => {
+    if (item === "\`") {
+    }
+  });
+};
+
+const demo = \`import a from "react";
+import a from "@yzh/yzhd";
+\`;
 `;
 const dd = sortImports(demo, configArray);
 console.log(dd);
